@@ -14,7 +14,7 @@ class ps_customerfields extends Module
 {
     public function __construct()
     {
-        $this->name = 'ps_customerfileds';
+        $this->name = 'ps_customerfields';
         $this->version = '1.0.0';
         $this->author = 'Pier Luigi Papeschi';
         $this->need_instance = 0;
