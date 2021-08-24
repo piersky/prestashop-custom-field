@@ -7,15 +7,15 @@ use PrestaShop\PrestaShop\Adapter\CoreException;
 class Customer extends CustomerCore
 {
 	/*
-    * module: ps_customercedula
-    * date: 2021-04-28 15:49:55
+    * module: ps_customerfields
+    * date: 2021-08-24 15:01:05
     * version: 1.0.1
     */
 	
-    public $cedula;
+    public $sdi;
     public function __construct($id = null)
     {
-        self::$definition['fields']['cedula'] = array('type' => self::TYPE_STRING, 'validate' => 'isGenericName');
+        self::$definition['fields']['sdi'] = array('type' => self::TYPE_STRING, 'validate' => 'isGenericName');
         parent::__construct($id);
     }
 }

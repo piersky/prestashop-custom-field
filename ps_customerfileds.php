@@ -10,30 +10,28 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ps_customercedula extends Module
+class ps_customerfields extends Module
 {
-    // const CLASS_NAME = 'ps_customercedula';
-
     public function __construct()
     {
-        $this->name = 'ps_customercedula';
+        $this->name = 'ps_customerfileds';
         $this->version = '1.0.0';
-        $this->author = 'wfpaisa';
+        $this->author = 'Pier Luigi Papeschi';
         $this->need_instance = 0;
 
         parent::__construct();
 
         $this->displayName = $this->getTranslator()->trans(
-            'Cedula',
+            'Customer Fields',
             [],
-            'Modules.ps_customercedula.Admin'
+            'Modules.ps_customerfields.Admin'
         );
 
         $this->description =
             $this->getTranslator()->trans(
-                'Customer cedula',
+                'Customer Fields',
                 [],
-                'Modules.ps_customercedula.Admin'
+                'Modules.ps_customerfields.Admin'
             );
 
         $this->ps_versions_compliancy = [
@@ -81,7 +79,7 @@ class ps_customercedula extends Module
      */
     protected function alterCustomerTable()
     {
-        $sql = 'ALTER TABLE `' . pSQL(_DB_PREFIX_) . 'customer` ADD `cedula` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL';
+        $sql = 'ALTER TABLE `' . pSQL(_DB_PREFIX_) . 'customer` ADD `sdi` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL';
         // CLEAN_INSTALATION 1/2  (if you want to delete all data after an installation)
         // comment:
         Db::getInstance()->execute($sql);
@@ -99,7 +97,7 @@ class ps_customercedula extends Module
     {
         // CLEAN_INSTALATION 2/2 (if you want to delete all data after an installation)
         // uncomment:
-        // $sql = 'ALTER TABLE `' . pSQL(_DB_PREFIX_) . 'customer` DROP `cedula`';
+        // $sql = 'ALTER TABLE `' . pSQL(_DB_PREFIX_) . 'customer` DROP `sdi`';
         // return Db::getInstance()->execute($sql);
         // 
         // and comment:
@@ -116,10 +114,10 @@ class ps_customercedula extends Module
     {
         return [
             (new FormField)
-                ->setName('cedula')
+                ->setName('sdi')
                 ->setType('text')
-                ->setRequired(true) // is Required
-                ->setLabel($this->l('Cédula'))
+                ->setRequired(false)
+                ->setLabel($this->l('SDI'))
         ];
     }
 
@@ -133,13 +131,13 @@ class ps_customercedula extends Module
     {
         /** @var FormBuilderInterface $formBuilder */
         $formBuilder = $params['form_builder'];
-        $formBuilder->add('cedula', TextType::class, [
-            'label' => $this->getTranslator()->trans('Cedula', [], 'Modules.ps_customercedula.Admin'),
+        $formBuilder->add('sdi', TextType::class, [
+            'label' => $this->getTranslator()->trans('SDI', [], 'Modules.ps_customerfields.Admin'),
             'required' => false,
         ]);
         
         $customer = new Customer($params['id']);
-        $params['data']['cedula'] = $customer->cedula;
+        $params['data']['sdi'] = $customer->sdi;
         
         $formBuilder->setData($params['data']);
 
@@ -155,7 +153,7 @@ class ps_customercedula extends Module
      */
     public function hookActionAfterUpdateCustomerFormHandler(array $params)
     {
-        $this->updateCustomerCedula($params);
+        $this->updateCustomerSdi($params);
     }
 
     /**
@@ -167,7 +165,7 @@ class ps_customercedula extends Module
      */
     public function hookActionAfterCreateCustomerFormHandler(array $params)
     {
-        $this->updateCustomerCedula($params);
+        $this->updateCustomerSdi($params);
     }
 
     /**
@@ -177,22 +175,21 @@ class ps_customercedula extends Module
      *
      * @throws \PrestaShop\PrestaShop\Core\Module\Exception\ModuleErrorException
      */
-    private function updateCustomerCedula(array $params)
+    private function updateCustomerSdi(array $params)
     {
         $customerId = (int)$params['id'];
         /** @var array $customerFormData */
         $customerFormData = $params['form_data'];
-        $cedula = $customerFormData['cedula'];
+        $sdi = $customerFormData['sdi'];
         
         try {
 
             $customer = new Customer($customerId);
-            $customer->cedula= $cedula;
+            $customer->sdi= $sdi;
             $customer->update();
 
         } catch (ReviewerException $exception) {
             throw new \PrestaShop\PrestaShop\Core\Module\Exception\ModuleErrorException($exception);
         }
     }
-
 }
